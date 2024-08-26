@@ -1,8 +1,14 @@
 import canvasModule from 'canvas';
-import { extensions, ExtensionType, Texture, TextureSource, utils } from '@pixi/core';
+import {
+    extensions,
+    ExtensionType,
+    getResolutionOfUrl,
+    Texture,
+    TextureSource,
+} from 'pixi.js';
 import { NodeCanvasElement } from './NodeCanvasElement';
 
-import type { LoaderParser, ResolvedAsset } from '@pixi/assets';
+import type { LoaderParser, ResolvedAsset } from 'pixi.js';
 
 const { loadImage } = canvasModule;
 const validMimes = ['image/png', 'image/jpg', 'image/jpeg', 'image/svg'];
@@ -35,8 +41,8 @@ export const loadNodeBase64 = {
 
         ctx?.drawImage(image as unknown as CanvasImageSource, 0, 0);
         const texture = Texture.from(canvas as unknown as TextureSource, {
-            resolution: utils.getResolutionOfUrl(url),
-            ...asset.data
+            resolution: getResolutionOfUrl(url),
+            ...asset.data,
         });
 
         return texture;
@@ -45,7 +51,7 @@ export const loadNodeBase64 = {
     unload(texture: Texture): void
     {
         texture.destroy(true);
-    }
+    },
 } as LoaderParser<Texture>;
 
 extensions.add(loadNodeBase64);

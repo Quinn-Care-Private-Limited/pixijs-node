@@ -1,12 +1,21 @@
 import canvasModule from 'canvas';
-import { getFontFamilyName } from '@pixi/assets';
-import { extensions, ExtensionType, utils } from '@pixi/core';
+import { extensions, ExtensionType, getFontFamilyName, path } from 'pixi.js';
 
-import type { LoaderParser, LoadFontData, ResolvedAsset } from '@pixi/assets';
+import type { LoaderParser, LoadFontData, ResolvedAsset } from 'pixi.js';
 
 const { registerFont } = canvasModule;
 const validWeights = [
-    'normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900',
+    'normal',
+    'bold',
+    '100',
+    '200',
+    '300',
+    '400',
+    '500',
+    '600',
+    '700',
+    '800',
+    '900',
 ];
 const validFonts = ['.woff', '.woff2', '.ttf', '.otf'];
 
@@ -16,14 +25,16 @@ export const loadNodeFont = {
 
     test(url: string): boolean
     {
-        return validFonts.includes(utils.path.extname(url).toLowerCase());
+        return validFonts.includes(path.extname(url).toLowerCase());
     },
 
     async load(url: string, options: ResolvedAsset<LoadFontData>): Promise<void>
     {
         const name = options.data?.family ?? getFontFamilyName(url);
-        const weights = options.data?.weights?.filter((weight) => validWeights.includes(weight)) ?? ['normal'];
-        const data = options.data ?? {} as LoadFontData;
+        const weights = options.data?.weights?.filter((weight) =>
+            validWeights.includes(weight)
+        ) ?? ['normal'];
+        const data = options.data ?? ({} as LoadFontData);
 
         for (let i = 0; i < weights.length; i++)
         {
